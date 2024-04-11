@@ -7,47 +7,39 @@ on:
   push:
     branches:
       - master
-
 env:
   GODOT_VERSION: 4.2.1
   EXPORT_NAME: CardJumper
   PROJECT_PATH: CardJumper
   EXPORT_PATH: ~/build/windows/
-
 jobs:
   export-windows:
     name: Windows Export
     runs-on: ubuntu-22.04
     container:
       image: barichello/godot-ci:mono-4.2.1
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           lfs: true
-
       - name: Setup
         run: |
           mkdir -v -p /github/home/.local/share/godot/export_templates/
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono /github/home/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-
       - name: .NET installation
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "6.0.x"
-
       - name: Windows Build
         run: |
           mkdir -v -p $EXPORT_PATH
           godot --headless --verbose --export-release "Windows Desktop" $EXPORT_PATH/$EXPORT_NAME.exe
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: windows
           path: ${{ env.EXPORT_PATH }}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -58,7 +50,6 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
