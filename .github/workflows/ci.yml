@@ -69,3 +69,4 @@ jobs:
           asset_path: ${{ env.EXPORT_PATH }}/CardJumper.exe
           asset_name: CardJumper.exe
           asset_content_type: application/octet-stream
+          
